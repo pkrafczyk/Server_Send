@@ -31,7 +31,7 @@ def client(host, port , zip_file):
 
 def zipkomprimireren(zip_file):
 
-  with zipfile.ZipFile(zip_file + '.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
+  with zipfile.ZipFile(zip_file.removeprefix('.txt') + '.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
     zipf.write(zip_file)
 
 if __name__ == '__main__':
