@@ -46,6 +46,6 @@ if __name__ == '__main__':
 
   host = sys.argv[1]
   port = int(sys.argv[2]) if len(sys.argv)>2 else 10000
-  zip_file = sys.argv[3]+".zip"
+  zip_file = sys.argv[3]+'.zip'
   server(host, port,zip_file)
   zipentpacken(zip_file)
