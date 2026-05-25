@@ -38,7 +38,7 @@ def server(local, port, zip_file):
 def zipentpacken(zip_file):
   zielorder = Path.cwd()
   with zipfile.ZipFile(zip_file + '.zip', 'r') as zipf:
-    zipf.extractall(zielorder + '/' + zip_file)
+    zipf.extractall(zielorder + '/' + zip_file.removesuffix('.zip'))
 
 if __name__ == '__main__':
   if len(sys.argv)<3:
@@ -47,6 +47,6 @@ if __name__ == '__main__':
 
   host = sys.argv[1]
   port = int(sys.argv[2]) if len(sys.argv)>2 else 10000
-  zip_file = sys.argv[3]+'.zip'
+  zip_file = sys.argv[3]
   server(host, port,zip_file)
 
