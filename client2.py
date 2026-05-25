@@ -31,7 +31,7 @@ def client(host, port , zip_file):
 
 def zipkomprimireren(zip_file):
 
-  with zipfile.ZipFile(zip_file + ".zip", "w", zipfile.ZIP_DEFLATED) as zipf:
+  with zipfile.ZipFile(zip_file + '.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
     zipf.write(zip_file)
 
 if __name__ == '__main__':
@@ -41,6 +41,6 @@ if __name__ == '__main__':
 
     host = sys.argv[1]
     port = int(sys.argv[2]) if len(sys.argv) > 2 else 10000
-    zipfile = sys.argv[3]
-    zipkomprimireren(zipfile)
-    client(host, port,zipfile +".zip")
+    dateiname = sys.argv[3]
+    zipkomprimireren(dateiname)
+    client(host, port,dateiname +'.zip')
