@@ -29,3 +29,8 @@ def server(local,port):
       connection.close()
       #return 0
   #return 1
+host = '192.168.178.31'
+port = 10000
+
+if __name__ == '__main__':
+  server(host, port)
