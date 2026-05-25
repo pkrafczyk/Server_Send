@@ -38,7 +38,7 @@ def server(local, port, zip_file):
 def zipentpacken(zip_filefile):
   zielorder = Path.cwd()
   print(zip_filefile)
-  with zipfile.ZipFile(f"{zip_filefile}.zip", 'r') as zipf:
+  with zipfile.ZipFile(f"{zip_filefile.removesuffix('.txt')}.zip", 'r') as zipf:
     zipf.extractall(path=zielorder)
 
 if __name__ == '__main__':
