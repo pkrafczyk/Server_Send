@@ -39,7 +39,7 @@ def zipentpacken(zip_filefile):
   zielorder = Path.cwd()
   print(zip_filefile)
   with zipfile.ZipFile(zip_filefile + '.zip', 'r') as zipf:
-    zipf.extractall(zielorder + '/' + zip_filefile)
+    zipf.extractall()
 
 if __name__ == '__main__':
   if len(sys.argv)<3:
