@@ -30,6 +30,7 @@ def server(local, port, zip_file):
     finally:
       print('closing connection')
       connection.close()
+      zipentpacken(zip_file)
       #return 0
   #return 1
 
@@ -48,4 +49,4 @@ if __name__ == '__main__':
   port = int(sys.argv[2]) if len(sys.argv)>2 else 10000
   zip_file = sys.argv[3]+'.zip'
   server(host, port,zip_file)
-  zipentpacken(zip_file)
+
