@@ -35,8 +35,8 @@ def zipkomprimireren(zip_file):
     zipf.write(zip_file)
 
 if __name__ == '__main__':
-    if len(sys.argv) < 2:
-        print('usage: python client2.py IP PORT')
+    if len(sys.argv) < 3:
+        print('usage: python client2.py IP PORT file')
         sys.exit(1)
 
     host = sys.argv[1]
