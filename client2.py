@@ -24,8 +24,12 @@ def client(host, port):
         sock.close()
         #return 0
     return 0
-host = '192.168.178.31'
-port = 10000
 
 if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('usage: python client2.py IP PORT')
+        sys.exit(1)
+
+    host = sys.argv[1]
+    port = int(sys.argv[2]) if len(sys.argv) > 2 else 10000
     client(host, port)

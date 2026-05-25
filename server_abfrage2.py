@@ -29,8 +29,12 @@ def server(local,port):
       connection.close()
       #return 0
   #return 1
-host = '192.168.178.31'
-port = 10000
 
 if __name__ == '__main__':
+  if len(sys.argv)<2:
+    print('usage: python server_abfrage2.py IP PORT')
+    sys.exit(1)
+
+  host = sys.argv[1]
+  port = int(sys.argv[2]) if len(sys.argv)>2 else 10000
   server(host, port)
