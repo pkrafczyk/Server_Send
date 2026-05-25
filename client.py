@@ -24,3 +24,9 @@ def client(host, port):
         sock.close()
         #return 0
     return 0
+host = '192.168.178.91'
+port = 10000
+if __name__ == '__main__':
+
+
+    client(host, port)

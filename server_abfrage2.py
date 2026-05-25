@@ -1,7 +1,9 @@
 #!/usr/bin/env phyton3
 import socket
 import sys
-def server(local,port):
+import zipfile
+from pathlib import Path
+def server(local, port, zip_file):
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
   server_adrresse = (local, port)
@@ -13,22 +15,29 @@ def server(local,port):
     connection, client_addresse =sock.accept()
     try:
       print('connection from ', client_addresse)
-
-      while True:
-        data = connection.recv(16)
-        print('received {!r}'.format(data))
-        if data:
-          print(' sending data back to client')
-          connection.sendall(data)
-        else:
-          print('no data from',client_addresse)
-          break
+      with open(zip_file,"wb") as datei:
+        while True:
+          data = connection.recv(4096)
+          print('received {!r}'.format(data))
+          if data:
+            print(' sending data back to client')
+            connection.sendall(data)
+          else:
+            print('no data from',client_addresse)
+            break
+          datei.write(data)
 
     finally:
       print('closing connection')
       connection.close()
       #return 0
   #return 1
+
+
+def zipentpacken(zip_file):
+  zielorder = Path.cwd()
+  with zipfile.ZipFile(zip_file + ".zip", "r") as zipf:
+    zipf.extractall(zielorder + "/" + zip_file)
 
 if __name__ == '__main__':
   if len(sys.argv)<2:
@@ -37,4 +46,6 @@ if __name__ == '__main__':
 
   host = sys.argv[1]
   port = int(sys.argv[2]) if len(sys.argv)>2 else 10000
-  server(host, port)
+  zip_file = sys.argv[3]+".zip"
+  server(host, port,zip_file)
+  zipentpacken(zip_file)
