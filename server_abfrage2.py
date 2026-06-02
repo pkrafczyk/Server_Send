@@ -2,8 +2,10 @@
 import socket
 import sys
 import zipfile
+from datetime import datetime
 from pathlib import Path
 def server(local, port, zip_file):
+  now = datetime.now()
   sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
   server_adrresse = (local, port)
@@ -31,6 +33,9 @@ def server(local, port, zip_file):
       print('closing connection')
       connection.close()
       zipentpacken(zip_file)
+      diff= datetime.now() -now
+      print(diff)
+
       #return 0
   #return 1
 
