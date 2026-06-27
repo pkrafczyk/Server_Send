@@ -8,7 +8,31 @@ import urllib.request
 import os
 import requests
 
+def fortschricht(geladene_bytes, gesamt_groesse):
+    #heruntergeladen = block_anzahl * block_groesse
 
+    if gesamt_groesse > 0:
+        prozent = min(100, int(geladene_bytes * 100 / gesamt_groesse))
+        mb_geladen = geladene_bytes / (1024 * 1024)
+        mb_gesamt = gesamt_groesse / (1024 * 1024)
+        sys.stdout.write(f"\rFortschritt: {prozent}% ({mb_geladen:.1f} MB von {mb_gesamt:.1f} MB)")
+        sys.stdout.flush()
+def hat_genug_speicher(url):
+    if os.name == 'nt':  # Windows
+        download_pfad = Path("C:/Downloads")
+    else:  # Linux und andere (z.B. macOS)
+        download_pfad = Path.home() / "Downloads"
+    response = requests.head(url)
+    file_size = int(response.headers.get('content-length', 0))
+    free_space = shutil.disk_usage(download_pfad).free
+
+
+    if free_space > file_size:
+        print("Genug Speicherplatz vorhanden. Download startet...")
+        return 1
+    else:
+        print("Zu wenig Speicherplatz!")
+        return 0
 def server(local, port,url, end):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -97,28 +121,5 @@ if __name__ == '__main__':
   #url = "http://speedtest.belwue.net/random-1G"
 
 
-def fortschricht(geladene_bytes, gesamt_groesse):
-    #heruntergeladen = block_anzahl * block_groesse
-
-    if gesamt_groesse > 0:
-        prozent = min(100, int(geladene_bytes * 100 / gesamt_groesse))
-        mb_geladen = geladene_bytes / (1024 * 1024)
-        mb_gesamt = gesamt_groesse / (1024 * 1024)
-        sys.stdout.write(f"\rFortschritt: {prozent}% ({mb_geladen:.1f} MB von {mb_gesamt:.1f} MB)")
-        sys.stdout.flush()
-def hat_genug_speicher(url):
-    if os.name == 'nt':  # Windows
-        download_pfad = Path("C:/Downloads")
-    else:  # Linux und andere (z.B. macOS)
-        download_pfad = Path.home() / "Downloads"
-    response = requests.head(url)
-    file_size = int(response.headers.get('content-length', 0))
-    free_space = shutil.disk_usage(download_pfad).free
 
 
-    if free_space > file_size:
-        print("Genug Speicherplatz vorhanden. Download startet...")
-        return 1
-    else:
-        print("Zu wenig Speicherplatz!")
-        return 0
