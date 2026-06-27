@@ -5,7 +5,7 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Kopiere das Skript in den Container
-COPY http_downloder.py .
+COPY http_downloader.py .
 
 # Definiere den Einstiegspunkt, damit Argumente direkt durchgereicht werden
 ENTRYPOINT ["python", "http_downloder.py"]
