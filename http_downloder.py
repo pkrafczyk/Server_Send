@@ -76,7 +76,7 @@ def herunterladen():
     dateiname = "random-1G.bin"
     print("Download gestartet. Bitte warten...")
     try:
-        urllib.request.urlretrieve(url, dateiname,fortschrict())
+        urllib.request.urlretrieve(url, dateiname,fortschrict)
         print(success_msg := f"Erfolgreich heruntergeladen: {dateiname}")
     except Exception as e:
         print(f"Fehler beim Download: {e}")
