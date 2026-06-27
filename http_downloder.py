@@ -20,47 +20,49 @@ def server(local, port,url, end):
         print("Sever starten...")
         while True :
             connection, client_addresse =sock.accept()
-            request =connection.recv(1024).decode("utf 8")
-            if request and hat_genug_speicher (url)==1:
-                print(f"\n--- Anfrage von {connection} ---")
-                print(request.split("\r\n")[0])  # Nur die erste Zeile (z.B. GET / HTTP/1.1)
-                try:
-                    with urllib.request.urlopen(url) as response:
-                        gesamt_groesse =int(response.headers.get('Content-Length', 0))
+            try:
+                request =connection.recv(1024).decode("utf 8")
+                if request :
+                    print(f"\n--- Anfrage von {connection} ---")
+                    print(request.split("\r\n")[0])  # Nur die erste Zeile (z.B. GET / HTTP/1.1)
+                    if  hat_genug_speicher (url)==1:
+                        try:
+                            with urllib.request.urlopen(url) as response:
+                                gesamt_groesse =int(response.headers.get('Content-Length', 0))
 
-                        dateiname = url.split("/")[3] + end
+                                dateiname = url.split("/")[3] + end
                         # Rohe HTTP-Antwort (Response) manuell aufbauen
                         #html_body = "<h1>Hallo aus dem rohen Python-Socket!</h1>"
                         #herunterladen(url)
-                        http_response = (
-                            "HTTP/1.1 200 OK\r\n"                    # Status-Zeil
-                            "Content-Type: application/octet-stream\r\n"
-                            f"Content-Disposition: attachment; filename=\"{dateiname}\"\r\n"
-                            f"Content-Length: {gesamt_groesse}\r\n"
-                            "Connection: close\r\n"                  # Header
-                            "\r\n"                                   # Leere Zeile trennt Header und Body
-                            f"{gesamt_groesse}"                           # Der eigentliche Inhalt
-                        )
-                        connection.sendall(http_response.encode("utf 8"))
-                        geladene_bytes=0
-                        chunk_size = 65536
-                        while True:
-                            chunk = response.read(chunk_size)
-                            if not chunk:
-                                break
+                                http_response = (
+                                    "HTTP/1.1 200 OK\r\n"                    # Status-Zeil
+                                    "Content-Type: application/octet-stream\r\n"
+                                    f"Content-Disposition: attachment; filename=\"{dateiname}\"\r\n"
+                                    f"Content-Length: {gesamt_groesse}\r\n"
+                                    "Connection: close\r\n"                  # Header
+                                    "\r\n"                                   # Leere Zeile trennt Header und Body
+                                    f"{gesamt_groesse}"                           # Der eigentliche Inhalt
+                                )
+                                connection.sendall(http_response.encode("utf 8"))
+                                geladene_bytes=0
+                                chunk_size = 65536
+                                while True:
+                                    chunk = response.read(chunk_size)
+                                    if not chunk:
+                                        break
 
-                            connection.sendall(chunk)
-                            geladene_bytes += len(chunk)
-                            fortschricht(geladene_bytes,gesamt_groesse)
-                except Exception as e:
-                    print(f"\nFehler beim Streaming: {e}")
+                                    connection.sendall(chunk)
+                                    geladene_bytes += len(chunk)
+                                    fortschricht(geladene_bytes,gesamt_groesse)
+                        except Exception as e:
+                            print(f"\nFehler beim Streaming: {e}")
             connection.close()
     except KeyboardInterrupt:
         print('closing connection')
         sock.close()
 
 if __name__ == '__main__':
-  if len(sys.argv)<3:
+  if len(sys.argv)<5:
     print('usage: python http_doenloder.py IP PORT ')
     sys.exit(1)
 
