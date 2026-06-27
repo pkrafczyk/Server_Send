@@ -21,12 +21,19 @@ def server(local, port,url, end):
         while True :
             connection, client_addresse =sock.accept()
             try:
-                request =connection.recv(1024).decode("utf 8")
-                if request :
+                    request =connection.recv(1024).decode("utf 8")
+
                     print(f"\n--- Anfrage von {connection} ---")
                     print(request.split("\r\n")[0])  # Nur die erste Zeile (z.B. GET / HTTP/1.1)
+                    if not request.strip():
+                        connection.close()
+                        continue
+                    if "GET /favicon.ico" in request:
+                        connection.sendall(b"HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n")
+                        connection.close()
+                        continue
                     if  hat_genug_speicher (url)==1:
-                        try:
+
                             with urllib.request.urlopen(url) as response:
                                 gesamt_groesse =int(response.headers.get('Content-Length', 0))
 
@@ -54,9 +61,11 @@ def server(local, port,url, end):
                                     connection.sendall(chunk)
                                     geladene_bytes += len(chunk)
                                     fortschricht(geladene_bytes,gesamt_groesse)
-                        except Exception as e:
-                            print(f"\nFehler beim Streaming: {e}")
-            connection.close()
+            except Exception as e:
+                print(f"\nFehler beim Streaming: {e}")
+            finally:
+                connection.close()
+
     except KeyboardInterrupt:
         print('closing connection')
         sock.close()
