@@ -8,4 +8,4 @@ WORKDIR /app
 COPY http_downloader.py .
 
 # Definiere den Einstiegspunkt, damit Argumente direkt durchgereicht werden
-ENTRYPOINT ["python", "http_downloder.py"]
+ENTRYPOINT ["python", "http_downloader.py"]
