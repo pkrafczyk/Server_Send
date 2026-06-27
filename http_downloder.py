@@ -1,7 +1,9 @@
 import socket
 import sys
 import shutil
-  import os
+import urllib.request
+#import requests
+import os
 def server(local, port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -68,3 +70,23 @@ def voifdad():
       print("Es ist genügend Speicherplatz vorhanden. Download kann starten.")
   else:
       print("Warnung: Nicht genügend Speicherplatz auf der Festplatte.")
+
+def herunterladen():
+    url = "http://speedtest.belwue.net/random-1G"
+    dateiname = "random-1G.bin"
+    print("Download gestartet. Bitte warten...")
+    try:
+        urllib.request.urlretrieve(url, dateiname,fortschrict())
+        print(success_msg := f"Erfolgreich heruntergeladen: {dateiname}")
+    except Exception as e:
+        print(f"Fehler beim Download: {e}")
+
+def fortschrict(block_anzahl,block_groesse, gesamt_groesse):
+    heruntergeladen = block_anzahl * block_groesse
+
+    if gesamt_groesse > 0:
+        prozent = min(100, int(heruntergeladen * 100 / gesamt_groesse))
+        mb_geladen = heruntergeladen / (1024 * 1024)
+        mb_gesamt = gesamt_groesse / (1024 * 1024)
+        sys.stdout.write(f"\rFortschritt: {prozent}% ({mb_geladen:.1f} MB von {mb_gesamt:.1f} MB)")
+        sys.stdout.flush()
