@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 import socket
@@ -6,7 +7,25 @@ import shutil
 import urllib.request
 #import docker
 import os
+
+import render_template
 import requests
+#from fastapi import FastAPI
+#from fastapi.staticfiles import StaticFiles
+#from fastapi.responses import FileResponse
+#from flask import Flask, render_template, Response
+#app = FastAPI()
+
+#@app.get("/")
+#def serve_home():
+ #   return FileResponse("templates/intex.html")
+
+#@app.get('/status')
+#def status(prozent,mb_geladen,mb_gesamt):
+ #   return render_template('intex.html',
+  #                         prozent=prozent,
+   #                        geladen=mb_geladen,
+    #                       gesamt=mb_gesamt)
 
 def fortschricht(geladene_bytes, gesamt_groesse):
     #heruntergeladen = block_anzahl * block_groesse
@@ -15,11 +34,13 @@ def fortschricht(geladene_bytes, gesamt_groesse):
         prozent = min(100, int(geladene_bytes * 100 / gesamt_groesse))
         mb_geladen = geladene_bytes / (1024 * 1024)
         mb_gesamt = gesamt_groesse / (1024 * 1024)
+        #status(prozent,mb_geladen,mb_gesamt)
         sys.stdout.write(f"\rFortschritt: {prozent}% ({mb_geladen:.1f} MB von {mb_gesamt:.1f} MB)")
         sys.stdout.flush()
 def hat_genug_speicher(url):
     if os.name == 'nt':  # Windows
-        download_pfad = Path("C:/Downloads")
+        #download_pfad = Path("C:/Downloads")
+        download_pfad = Path.home() / "Downloads"
     else:  # Linux und andere (z.B. macOS)
         download_pfad = Path.home() / "Downloads"
     response = requests.head(url)
