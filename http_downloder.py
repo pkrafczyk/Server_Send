@@ -14,7 +14,7 @@ def server(local, port):
     try:
         while True :
             connection, client_addresse =sock.accept()
-            request =connection.resv(1024).decode("utf 8")
+            request =connection.recv(1024).decode("utf 8")
             if request:
                 print(f"\n--- Anfrage von {connection} ---")
                 print(request.split("\r\n")[0]) # Nur die erste Zeile (z.B. GET / HTTP/1.1)
