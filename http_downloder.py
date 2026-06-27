@@ -41,7 +41,7 @@ def server(local, port,url, end):
                             "\r\n"                                   # Leere Zeile trennt Header und Body
                             f"{gesamt_groesse}"                           # Der eigentliche Inhalt
                         )
-                        connection.sendall(http_response.endcode("utf 8"))
+                        connection.sendall(http_response.encode("utf 8"))
                         geladene_bytes=0
                         chunk_size = 65536
                         while True:
