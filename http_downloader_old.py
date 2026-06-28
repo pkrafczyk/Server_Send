@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 import socket
@@ -7,26 +6,7 @@ import shutil
 import urllib.request
 #import docker
 import os
-
-import render_template
 import requests
-#from fastapi import FastAPI
-#from fastapi.staticfiles import StaticFiles
-#from fastapi.responses import FileResponse
-#from flask import Flask, render_template, Response
-#app = FastAPI()
-
-#@app.get("/")
-#def serve_home():
- #   return FileResponse("templates/intex.html")
-
-#@app.get('/status')
-#def status(prozent,mb_geladen,mb_gesamt):
- #   return render_template('intex.html',
-  #                         prozent=prozent,
-   #                        geladen=mb_geladen,
-    #                       gesamt=mb_gesamt)
-
 def fortschricht(geladene_bytes, gesamt_groesse):
     #heruntergeladen = block_anzahl * block_groesse
 
@@ -34,13 +14,12 @@ def fortschricht(geladene_bytes, gesamt_groesse):
         prozent = min(100, int(geladene_bytes * 100 / gesamt_groesse))
         mb_geladen = geladene_bytes / (1024 * 1024)
         mb_gesamt = gesamt_groesse / (1024 * 1024)
-        #status(prozent,mb_geladen,mb_gesamt)
         sys.stdout.write(f"\rFortschritt: {prozent}% ({mb_geladen:.1f} MB von {mb_gesamt:.1f} MB)")
         sys.stdout.flush()
+
 def hat_genug_speicher(url):
     if os.name == 'nt':  # Windows
-        #download_pfad = Path("C:/Downloads")
-        download_pfad = Path.home() / "Downloads"
+        download_pfad = Path("C:/Downloads")
     else:  # Linux und andere (z.B. macOS)
         download_pfad = Path.home() / "Downloads"
     response = requests.head(url)
@@ -60,7 +39,6 @@ def server(local, port,url, end):
     server_adrresse = (local, port)
     sock.bind(server_adrresse)
     sock.listen(5)
-    print(f"http://{local}:{port}")
 
     try:
         print("Sever starten...")
@@ -93,10 +71,8 @@ def server(local, port,url, end):
                                     f"Content-Disposition: attachment; filename=\"{dateiname}\"\r\n"
                                     f"Content-Length: {gesamt_groesse}\r\n"
                                     "Connection: close\r\n"                  # Header
-                                    "Cache-Control: no-store, no-cache, must-revalidate, max-age=0\r\n"  # Erzwingt immer Neu-Download
-                                    "Pragma: no-cache\r\n"                                                # Für ältere HTTP/1.0 Clients
-                                    "Expires: 0\r\n"  
                                     "\r\n"                                   # Leere Zeile trennt Header und Body
+                                    f"{gesamt_groesse}"                           # Der eigentliche Inhalt
                                 )
                                 connection.sendall(http_response.encode("utf 8"))
                                 geladene_bytes=0
@@ -109,16 +85,6 @@ def server(local, port,url, end):
                                     connection.sendall(chunk)
                                     geladene_bytes += len(chunk)
                                     fortschricht(geladene_bytes,gesamt_groesse)
-                    else:
-                    # Antwort senden, falls nicht genug Speicherplatz vorhanden ist
-                        error_response = (
-                            "HTTP/1.1 507 Insufficient Storage\r\n"
-                            "Content-Type: text/plain\r\n"
-                            "Connection: close\r\n"
-                            "\r\n"
-                            "Server hat nicht genug Speicherplatz für diesen Download."
-                        )
-                        connection.sendall(error_response.encode("utf-8"))
             except Exception as e:
                 print(f"\nFehler beim Streaming: {e}")
             finally:
@@ -140,7 +106,5 @@ if __name__ == '__main__':
   #zip_file = sys.argv[3]
   server(host, port ,url, end)
   #url = "http://speedtest.belwue.net/random-1G"
-
-
 
 
