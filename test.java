@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
-public class proxy {
+public class test {
     private static final int PORT = 80; // Interner Port der Container (A1)
 
     public static void main(String[] args) {
