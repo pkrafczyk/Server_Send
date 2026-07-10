@@ -1,0 +1,21 @@
+Host:
+docker compose -f docker-compose-routing.yml exec hostA ip route del default
+docker compose -f docker-compose-routing.yml exec hostA ip route add default via 192.168.0.2
+
+docker compose -f docker-compose-routing.yml exec hostD ip route del default
+docker compose -f docker-compose-routing.yml exec hostD ip route add default via 172.33.0.3
+
+docker compose -f docker-compose-routing.yml exec hostC ip route del default
+docker compose -f docker-compose-routing.yml exec hostC ip route add default via 10.0.0.2
+
+Router:
+docker compose -f docker-compose-routing.yml exec routerAB ip route add 10.0.0.0/8 via 172.44.0.3
+
+docker compose -f docker-compose-routing.yml exec routerBCD ip route add 192.168.0.0/16 via 172.44.0.2
+
+
+PING & Traceroute:
+docker compose -f docker-compose-routing.yml exec hostD ping -c 4 10.0.0.10
+docker compose -f docker-compose-routing.yml exec hostD traceroute -n 192.168.0.10
+
+
